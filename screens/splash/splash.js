@@ -127,7 +127,7 @@ export default class Splash extends Component {
                 mode="contained"
                 style={styles.buttonGoogle}
                 onPress={() =>
-                  this.props.navigation.navigate("Home", { name: "user" })
+                  this.props.navigation.navigate("Tabs", { name: "user" })
                 }
               >
                 <Text style={styles.textStyleSocial}>Sign In With Google</Text>
@@ -142,7 +142,7 @@ export default class Splash extends Component {
                   const response = await toggleFacebookAuthAsync();
                   if (response.auth) {
                     console.log(response);
-                    this.props.navigation.navigate("Home", {
+                    this.props.navigation.navigate("Tabs", {
                       name: response.data.name,
                       // name: "user",
                     });
@@ -163,7 +163,9 @@ export default class Splash extends Component {
               <Button
                 mode="contained"
                 style={styles.button}
-                onPress={() => this.props.navigation.navigate("Login")}
+                onPress={() =>
+                  this.props.navigation.navigate("Tabs", { name: "user" })
+                }
               >
                 <Text style={styles.textStyle}>Sign In</Text>
               </Button>

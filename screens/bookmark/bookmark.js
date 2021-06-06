@@ -4,7 +4,7 @@ import { Button } from "react-native-paper";
 // import { Overlay } from "react-native-elements";
 import styles from "./styles";
 
-export default class Home extends Component {
+export default class Bookmark extends Component {
   static navigationOptions = {
     headerShown: false,
     gestureEnabled: false,
@@ -22,7 +22,7 @@ export default class Home extends Component {
     return (
       <SafeAreaView style={{ flex: 1 }}>
         <View style={styles.containerMain}>
-          <Text>Welcome!</Text>
+          <Text>Bookmark!</Text>
           <Button
             mode="contained"
             style={styles.button}
