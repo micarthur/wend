@@ -7,6 +7,7 @@ import Home from "../home/home";
 import Search from "../search/search";
 import Bookmark from "../bookmark/bookmark";
 import Stocks from "../stocks/stocks";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
 
 // function HomeScreen() {
@@ -44,10 +45,35 @@ export default class Tabs extends Component {
   render() {
     return (
       <NavigationContainer>
-        <Tab.Navigator>
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === "Home") {
+                iconName = "ios-home";
+              } else if (route.name === "Search") {
+                iconName = "ios-search";
+              } else if (route.name === "Bookmarks") {
+                iconName = "ios-bookmarks";
+              } else if (route.name === "Stocks") {
+                iconName = "ios-trending-up";
+              } else if (route.name === "Settings") {
+                iconName = "ios-cog";
+              }
+
+              // You can return any component that you like here!
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+          })}
+          tabBarOptions={{
+            activeTintColor: "tomato",
+            inactiveTintColor: "gray",
+          }}
+        >
           <Tab.Screen name="Home" component={Home} />
           <Tab.Screen name="Search" component={Search} />
-          <Tab.Screen name="Bookmark" component={Bookmark} />
+          <Tab.Screen name="Bookmarks" component={Bookmark} />
           <Tab.Screen name="Stocks" component={Stocks} />
           <Tab.Screen name="Settings" component={SettingsScreen} />
         </Tab.Navigator>
