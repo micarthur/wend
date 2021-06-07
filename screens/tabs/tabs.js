@@ -10,20 +10,16 @@ import Stocks from "../stocks/stocks";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
 
-// function HomeScreen() {
-//   return (
-//     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-//       <Text>Home!</Text>
-//     </View>
-//   );
-// }
-
-function SettingsScreen() {
+function SettingsScreen({ navigation }) {
   return (
     <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
       <Text>Settings!</Text>
     </View>
   );
+}
+
+function LogoTitle() {
+  return <Image style={{ width: 50, height: 50 }} />;
 }
 
 const Tab = createBottomTabNavigator();
@@ -33,14 +29,6 @@ export default class Tabs extends Component {
     headerShown: false,
     gestureEnabled: false,
   };
-
-  // state = {
-  // 	overlayVisible: false,
-  // };
-
-  // setOverlayVisible = (visible) => {
-  // 	this.setState({ overlayVisible: visible });
-  // };
 
   render() {
     return (
@@ -62,7 +50,6 @@ export default class Tabs extends Component {
                 iconName = "ios-cog";
               }
 
-              // You can return any component that you like here!
               return <Ionicons name={iconName} size={size} color={color} />;
             },
           })}

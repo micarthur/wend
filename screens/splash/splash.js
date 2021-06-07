@@ -127,6 +127,7 @@ export default class Splash extends Component {
                 mode="contained"
                 style={styles.buttonGoogle}
                 onPress={() =>
+                  // need to rewrite google authentication
                   this.props.navigation.navigate("Tabs", { name: "user" })
                 }
               >
