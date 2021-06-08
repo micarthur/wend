@@ -121,6 +121,19 @@ export default class Splash extends Component {
       <ImageBackground source={image} style={styles.image}>
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.containerMain}>
+            <View style={styles.bottomViewApple}>
+              <Button
+                icon="apple"
+                mode="contained"
+                style={styles.buttonApple}
+                onPress={() =>
+                  // need to rewrite apple authentication
+                  this.props.navigation.navigate("Tabs", { name: "user" })
+                }
+              >
+                <Text style={styles.textStyleSocial}>Sign In With Apple</Text>
+              </Button>
+            </View>
             <View style={styles.bottomViewGoogle}>
               <Button
                 icon="google"

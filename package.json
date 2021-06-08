@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@freakycoder/react-native-bounceable": "^0.2.5",
     "@react-native-community/google-signin": "^5.0.0",
     "@react-navigation/bottom-tabs": "^5.11.11",
     "@react-navigation/stack": "^5.14.2",
@@ -17,8 +18,10 @@
     "native-base": "^2.15.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+    "react-native": "^0.63.2",
     "react-native-androw": "^0.0.34",
+    "react-native-animated-spinkit": "^1.5.2",
+    "react-native-dynamic-search-bar": "^2.0.1",
     "react-native-elements": "^3.1.0",
     "react-native-fbsdk": "^3.0.0",
     "react-native-gesture-handler": "~1.8.0",
