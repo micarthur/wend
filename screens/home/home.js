@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { View, Text, Image, SafeAreaView, StyleSheet } from "react-native";
 import { Button, IconButton } from "react-native-paper";
+import { Card } from "react-native-material-ui";
 import { createStackNavigator } from "@react-navigation/stack";
 // import { Overlay } from "react-native-elements";
 import styles from "./styles";
