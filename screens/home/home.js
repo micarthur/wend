@@ -1,24 +1,51 @@
 import React, { Component } from "react";
-import { View, Text, Image, SafeAreaView, StyleSheet } from "react-native";
+import { View, Text, Image, SafeAreaView, ScrollView } from "react-native";
 import { Button, IconButton } from "react-native-paper";
-import { Card } from "react-native-material-ui";
+// import { Card, SimpleCard } from "@paraboly/react-native-card";
+import Icon from "react-native-vector-icons/Ionicons";
+// import { CardButton } from "@paraboly/react-native-card-button"; implement into other parts of app
 import { createStackNavigator } from "@react-navigation/stack";
 // import { Overlay } from "react-native-elements";
+import NewsCard from "../../components/NewsCard/NewsCard";
 import styles from "./styles";
 
-function HomeScreen({ navigation }) {
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <View style={styles.containerMain}>
-        <Text>Welcome!</Text>
-        {/* <Button
+{
+  /* <Button
           mode="contained"
           style={styles.button}
           onPress={() => this.props.navigation.goBack()}
         >
           <Text style={styles.textStyle}>Go Back</Text>
-        </Button> */}
-      </View>
+        </Button> */
+}
+const data = {
+  first: "State Department Lifts Travel Restrictions For Dozens Of Countries",
+  description:
+    "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+};
+
+function HomeScreen({ navigation }) {
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={styles.containerMain}>
+        <NewsCard title={data.first} description={data.description} />
+        <NewsCard title="Second" description="Some more bs." />
+        <NewsCard
+          title="Third"
+          description="Even more bs."
+          // style={styles.card}
+          // onPress={() => {
+          //   alert("Card Pressed");
+          // }}
+        />
+        <NewsCard title="Second" description="Some more bs." />
+        <NewsCard title="Second" description="Some more bs." />
+        <NewsCard title="Second" description="Some more bs." />
+        <NewsCard title="Second" description="Some more bs." />
+        <NewsCard title="Second" description="Some more bs." />
+        <NewsCard title="Second" description="Some more bs." />
+        <NewsCard title="Second" description="Some more bs." />
+      </ScrollView>
     </SafeAreaView>
   );
 }
