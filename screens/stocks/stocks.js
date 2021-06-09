@@ -9,13 +9,22 @@ import {
 } from "react-native";
 import { Button, IconButton } from "react-native-paper";
 import { createStackNavigator } from "@react-navigation/stack";
+import SearchBar from "react-native-dynamic-search-bar";
 import styles from "./styles";
 
 function StocksScreen() {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.containerMain}>
-        <Text>Stocks!</Text>
+        <View style={styles.searchView}>
+          <SearchBar
+            placeholder="Search here"
+            onPress={() => alert("onPress")}
+            onChangeText={(text) => console.log(text)}
+            onSearchPress={() => console.log("Search Icon is pressed")}
+          />
+        </View>
+        <Text>Search!</Text>
       </View>
     </SafeAreaView>
   );

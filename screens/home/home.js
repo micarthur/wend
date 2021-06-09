@@ -72,6 +72,7 @@ export default class Home extends Component {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
+          // user_name={this.props.user_name}
           options={{
             title: "Home",
             headerRight: () => (
@@ -86,7 +87,8 @@ export default class Home extends Component {
                 icon="chevron-left-circle"
                 color="#007AFF"
                 onPress={() => {
-                  this.props.navigation.goBack();
+                  // this.props.navigation.goBack();
+                  alert(this.props.user_name);
                 }}
               />
             ),

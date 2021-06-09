@@ -58,7 +58,11 @@ export default class Tabs extends Component {
             inactiveTintColor: "gray",
           }}
         >
-          <Tab.Screen name="Home" component={Home} />
+          <Tab.Screen
+            name="Home"
+            component={Home}
+            // user_name={this.props.name}
+          />
           <Tab.Screen name="Search" component={Search} />
           <Tab.Screen name="Bookmarks" component={Bookmark} />
           <Tab.Screen name="Stocks" component={Stocks} />

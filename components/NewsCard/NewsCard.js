@@ -13,7 +13,7 @@ export default class NewsCard extends Component {
   };
 
   onPress = () => {
-    if (this.state.count == 0) {
+    if (this.state.pressed == false) {
       this.setState({
         count: (this.state.count += 1),
         likeIcon: "heart-sharp",
@@ -22,7 +22,7 @@ export default class NewsCard extends Component {
     }
     if (this.state.pressed == true) {
       this.setState({
-        count: (this.state.count = 0),
+        count: (this.state.count -= 1),
         likeIcon: "heart-outline",
         pressed: false,
       });

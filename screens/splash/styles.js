@@ -7,6 +7,7 @@ export default StyleSheet.create({
     justifyContent: "center",
   },
   button: {
+    borderRadius: 50,
     width: 180,
     height: 45,
     backgroundColor: "white",
@@ -14,6 +15,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   buttonFacebook: {
+    borderRadius: 50,
     width: 300,
     height: 45,
     backgroundColor: "#0000ff",
@@ -21,6 +23,7 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   buttonGoogle: {
+    borderRadius: 50,
     width: 300,
     height: 45,
     backgroundColor: "green",
@@ -28,11 +31,11 @@ export default StyleSheet.create({
     alignItems: "center",
   },
   buttonApple: {
+    // borderRadius: 50,
     width: 300,
     height: 45,
-    backgroundColor: "black",
-    justifyContent: "center",
-    alignItems: "center",
+    // justifyContent: "center",
+    // alignItems: "center",
   },
   containerMain: {
     flex: 1,
@@ -85,6 +88,7 @@ export default StyleSheet.create({
     fontWeight: "bold",
   },
   textStyleSocial: {
+    // fontFamily: "Helvetica Neue",
     color: "white",
     fontSize: 20,
     fontWeight: "bold",

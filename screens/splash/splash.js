@@ -1,6 +1,14 @@
 import React, { Component, useEffect } from "react";
-import { Text, View, ImageBackground, SafeAreaView } from "react-native";
+import {
+  Text,
+  View,
+  ImageBackground,
+  SafeAreaView,
+  StatusBar,
+} from "react-native";
 import { Button } from "react-native-paper";
+// import { AppleButton } from "@invertase/react-native-apple-authentication";
+import * as AppleAuthentication from "expo-apple-authentication";
 import * as Facebook from "expo-facebook";
 import styles from "./styles";
 import {
@@ -8,65 +16,9 @@ import {
   googleIOSClientId,
   googleAndroidClientId,
 } from "../../config/constants";
+import Register from "../register/register";
 
-const image = require("./wend.jpeg");
-
-// const initSocialLogin = async () => {
-// 	try {
-// 		await Facebook.initializeAsync(facebookAppId);
-// 	} catch (e) {
-// 		console.log(e);
-// 	}
-// };
-
-// export const fbLogin = async () => {
-// 	try {
-// 		await Facebook.initializeAsync(facebookAppId);
-// 		const { token, type } = await Facebook.logInWithReadPermissionsAsync(
-// 			facebookAppId,
-// 			{
-// 				permissions: ["public_profile"],
-// 			}
-// 		);
-
-// 		// GET USER DATA FROM FB API
-// 		const response = await fetch(
-// 			`https://graph.facebook.com/me?access_token=${token}`
-// 		);
-// 		const user = await response.json();
-
-// 		// GET PROFILE IMAGE DATA FROM FB API
-// 		// NOTE THAT I SET THE IMAGE WIDTH TO 500 WHICH IS OPTIONAL
-// 		const pictureResponse = await fetch(
-// 			`https://graph.facebook.com/v8.0/${user.id}/picture?width=500&redirect=false&access_token=${token}`
-// 		);
-// 		const pictureOBject = await pictureResponse.json();
-// 		const userObject = {
-// 			...user,
-// 			photoUrl: pictureOBject.data.url,
-// 		};
-
-// 		return { type, token, user: userObject };
-// 	} catch (e) {
-// 		return { error: e };
-// 	}
-// };
-
-// const handleFBLoginPress = async () => {
-// 	const { type, token, user, error } = await fbLogin();
-
-// 	if (type && token) {
-// 		if (type === "success") {
-// 			// DISPATCH TOKEN AND USER DATA
-// 			// TO HANDLE NAVIGATION TO HOME AND DISPLAY USER INFO
-// 			dispatch({ type: "FB_LOGIN", token, user });
-// 			alert("Here");
-// 			console.log(user);
-// 		}
-// 	} else if (error) {
-// 		console.log("The login attempt was cancelled");
-// 	}
-// };
+const image = require("./wend.png");
 
 async function toggleFacebookAuthAsync() {
   await Facebook.initializeAsync(facebookAppId);
@@ -88,11 +40,33 @@ async function toggleFacebookAuthAsync() {
   return { auth: true, data: body };
 }
 
+async function logInApple() {
+  try {
+    const credential = await AppleAuthentication.signInAsync({
+      requestedScopes: [
+        AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+        AppleAuthentication.AppleAuthenticationScope.EMAIL,
+      ],
+    });
+    if (credential) {
+      // this.props.navigation.navigate("Tabs", { name: "user" });
+      return credential;
+    }
+  } catch (e) {
+    if (e.code === "ERR_CANCELED") {
+      alert("Cancelled!");
+    } else {
+      // handle other errors
+    }
+  }
+}
+
 async function logInFacebook() {
   try {
     await Facebook.initializeAsync({
       appId: facebookAppId,
     });
+    // implement putting in and checking expiration date in database for auth expiration
     const { type, token, expirationDate, permissions, declinedPermissions } =
       await Facebook.logInWithReadPermissionsAsync({
         permissions: ["email", "public_profile"],
@@ -115,13 +89,27 @@ async function logInFacebook() {
 export default class Splash extends Component {
   static navigationOptions = {
     headerShown: false,
+    gestureEnabled: true,
   };
+
+  state = {
+    registerVisible: false,
+  };
+
+  showModal = () => {
+    if (this.state.registerVisible == false) {
+      this.setState({ registerVisible: true });
+    }
+  };
+  hideModal = () => this.setState({ registerVisible: false });
+
   render() {
+    StatusBar.setBarStyle("dark-content", true);
     return (
       <ImageBackground source={image} style={styles.image}>
         <SafeAreaView style={{ flex: 1 }}>
           <View style={styles.containerMain}>
-            <View style={styles.bottomViewApple}>
+            {/* <View style={styles.bottomViewApple}>
               <Button
                 icon="apple"
                 mode="contained"
@@ -133,6 +121,25 @@ export default class Splash extends Component {
               >
                 <Text style={styles.textStyleSocial}>Sign In With Apple</Text>
               </Button>
+            </View> */}
+            <View style={styles.bottomViewApple}>
+              <AppleAuthentication.AppleAuthenticationButton
+                buttonType={
+                  AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+                }
+                buttonStyle={
+                  AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+                }
+                cornerRadius={50}
+                style={styles.buttonApple}
+                onPress={async () => {
+                  const response = await logInApple();
+                  console.log(response);
+                  if (response.authorizationCode) {
+                    this.props.navigation.navigate("Tabs");
+                  }
+                }}
+              />
             </View>
             <View style={styles.bottomViewGoogle}>
               <Button
@@ -140,11 +147,10 @@ export default class Splash extends Component {
                 mode="contained"
                 style={styles.buttonGoogle}
                 onPress={() =>
-                  // need to rewrite google authentication
                   this.props.navigation.navigate("Tabs", { name: "user" })
                 }
               >
-                <Text style={styles.textStyleSocial}>Sign In With Google</Text>
+                <Text style={styles.textStyleSocial}>Sign in with Google</Text>
               </Button>
             </View>
             <View style={styles.bottomViewFacebook}>
@@ -158,7 +164,6 @@ export default class Splash extends Component {
                     console.log(response);
                     this.props.navigation.navigate("Tabs", {
                       name: response.data.name,
-                      // name: "user",
                     });
                   }
                 }}
@@ -167,13 +172,19 @@ export default class Splash extends Component {
               </Button>
             </View>
             <View style={styles.bottomView}>
-              <Button
-                mode="contained"
-                style={styles.button}
-                onPress={() => this.props.navigation.navigate("Register")}
-              >
-                <Text style={styles.textStyle}>Sign Up</Text>
-              </Button>
+              <View>
+                <Button
+                  mode="contained"
+                  style={styles.button}
+                  onPress={this.showModal}
+                >
+                  <Text style={styles.textStyle}>Sign Up</Text>
+                </Button>
+                <Register
+                  visible={this.state.registerVisible}
+                  dismiss={this.hideModal}
+                />
+              </View>
               <Button
                 mode="contained"
                 style={styles.button}

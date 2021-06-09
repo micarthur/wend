@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
+import { Provider as PaperProvider } from "react-native-paper";
 import Login from "./screens/login/login";
 import Register from "./screens/register/register";
 import Splash from "./screens/splash/splash";
@@ -17,7 +18,7 @@ const AppNavigator = createStackNavigator(
   {
     Splash: Splash,
     Login: Login,
-    Register: Register,
+    // Register: Register,
     Tabs: Tabs,
   },
   {
