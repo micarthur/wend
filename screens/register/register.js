@@ -119,7 +119,7 @@ export default class Register extends Component {
                     type="email"
                   />
                 </View>
-                <View>
+                <View style={styles.inputView}>
                   <TextInput
                     style={styles.input}
                     onChangeText={this.handlePassword}

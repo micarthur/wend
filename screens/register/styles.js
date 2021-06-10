@@ -66,10 +66,13 @@ export default StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     width: "100%",
-    height: 50,
+    height: "1%",
     justifyContent: "space-around",
     alignItems: "center",
     bottom: "45%",
     position: "absolute",
+  },
+  inputView: {
+    paddingBottom: 30,
   },
 });
