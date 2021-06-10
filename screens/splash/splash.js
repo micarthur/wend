@@ -22,23 +22,27 @@ import Login from "../login/login";
 const image = require("./wend.png");
 
 async function toggleFacebookAuthAsync() {
-  await Facebook.initializeAsync(facebookAppId);
-  const auth = await Facebook.getAuthenticationCredentialAsync();
-  let body;
+  try {
+    await Facebook.initializeAsync(facebookAppId);
+    const auth = await Facebook.getAuthenticationCredentialAsync();
+    let body;
 
-  if (!auth) {
-    body = await logInFacebook();
-  } else {
-    console.log(auth);
-    const resolvedToken = auth.token;
-    const response = await fetch(
-      `https://graph.facebook.com/me?fields=email,name&access_token=${resolvedToken}`
-    );
-    body = await response.json();
-    // // alert(`Hi ${body.name}!`);
-    // console.log(body);
+    if (!auth) {
+      body = await logInFacebook();
+    } else {
+      console.log(auth);
+      const resolvedToken = auth.token;
+      const response = await fetch(
+        `https://graph.facebook.com/me?fields=email,name&access_token=${resolvedToken}`
+      );
+      body = await response.json();
+      // // alert(`Hi ${body.name}!`);
+      // console.log(body);
+    }
+    return { auth: true, data: body };
+  } catch (e) {
+    throw e;
   }
-  return { auth: true, data: body };
 }
 
 async function logInApple() {
@@ -54,11 +58,7 @@ async function logInApple() {
       return credential;
     }
   } catch (e) {
-    if (e.code === "ERR_CANCELED") {
-      alert("Cancelled!");
-    } else {
-      // handle other errors
-    }
+    throw e;
   }
 }
 
@@ -83,7 +83,7 @@ async function logInFacebook() {
       // type === 'cancel'
     }
   } catch ({ message }) {
-    alert(`Facebook Login Error: ${message}`);
+    throw new Error(`Facebook Login Error: ${message}`);
   }
 }
 
@@ -142,10 +142,18 @@ export default class Splash extends Component {
                 cornerRadius={50}
                 style={styles.buttonApple}
                 onPress={async () => {
-                  const response = await logInApple();
-                  console.log(response);
-                  if (response.authorizationCode) {
-                    this.props.navigation.navigate("Tabs");
+                  try {
+                    const response = await logInApple();
+                    console.log(response);
+                    if (response.authorizationCode) {
+                      this.props.navigation.navigate("Tabs");
+                    }
+                  } catch (e) {
+                    if (e.code === "ERR_CANCELED") {
+                      alert("Cancelled!");
+                    } else {
+                      alert("Error!");
+                    }
                   }
                 }}
               />
@@ -168,12 +176,16 @@ export default class Splash extends Component {
                 mode="contained"
                 style={styles.buttonFacebook}
                 onPress={async () => {
-                  const response = await toggleFacebookAuthAsync();
-                  if (response.auth) {
-                    console.log(response);
-                    this.props.navigation.navigate("Tabs", {
-                      name: response.data.name,
-                    });
+                  try {
+                    const response = await toggleFacebookAuthAsync();
+                    if (response.auth) {
+                      console.log(response);
+                      this.props.navigation.navigate("Tabs", {
+                        name: response.data.name,
+                      });
+                    }
+                  } catch (e) {
+                    alert(e);
                   }
                 }}
               >
