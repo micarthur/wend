@@ -150,9 +150,9 @@ export default class Splash extends Component {
                     }
                   } catch (e) {
                     if (e.code === "ERR_CANCELED") {
-                      alert("Cancelled!");
+                      console.log("Apple Sign In Request Cancelled!");
                     } else {
-                      alert("Error!");
+                      console.log(e);
                     }
                   }
                 }}
@@ -185,7 +185,7 @@ export default class Splash extends Component {
                       });
                     }
                   } catch (e) {
-                    alert(e);
+                    console.log(e);
                   }
                 }}
               >
