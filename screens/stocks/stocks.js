@@ -24,7 +24,7 @@ function StocksScreen() {
             onSearchPress={() => console.log("Search Icon is pressed")}
           />
         </View>
-        <Text>Search!</Text>
+        <Text>Stocks!</Text>
       </View>
     </SafeAreaView>
   );

@@ -1,12 +1,6 @@
 import { StyleSheet } from "react-native";
 
 export default StyleSheet.create({
-  //   containerMain: {
-  //     flex: 1,
-  //     alignItems: "center",
-  //     justifyContent: "center",
-  //     marginTop: 22,
-  //   },
   centeredView: {
     flex: 1,
     justifyContent: "center",
@@ -29,18 +23,13 @@ export default StyleSheet.create({
     elevation: 5,
     width: "100%",
     height: "100%",
-    top: "15%",
+    top: "13%",
   },
   input: {
     height: 40,
     margin: 12,
     borderRadius: 10,
     width: 300,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
   },
   modalContent: {
     flex: 1,
@@ -53,13 +42,22 @@ export default StyleSheet.create({
     bottom: "80%",
     left: 0,
     right: 0,
-    backgroundColor: "rgba(0,0,0,0)",
+    backgroundColor: "rgba(29,167,229,0.5)",
   },
-  button: {
+  buttonSubmit: {
     borderRadius: 50,
     width: 180,
     height: 45,
-    backgroundColor: "skyblue",
+    backgroundColor: "rgba(29,167,229,1)",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: 5,
+  },
+  buttonCancel: {
+    borderRadius: 50,
+    width: 180,
+    height: 45,
+    backgroundColor: "lightcoral",
     justifyContent: "center",
     alignItems: "center",
     margin: 5,

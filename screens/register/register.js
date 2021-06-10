@@ -12,7 +12,7 @@ import {
   Pressable,
 } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-// import { Overlay } from "react-native-elements";
+import Icon from "react-native-vector-icons/Ionicons";
 import styles from "./styles";
 import t from "prop-types";
 
@@ -25,14 +25,6 @@ export default class Register extends Component {
 
   //   const [modalVisible, setModalVisible] = useState(false);
 
-  // state = {
-  // 	overlayVisible: false,
-  // };
-
-  // setOverlayVisible = (visible) => {
-  // 	this.setState({ overlayVisible: visible });
-  // };
-
   static propTypes = {
     visible: t.bool.isRequired,
     dismiss: t.func.isRequired,
@@ -43,6 +35,39 @@ export default class Register extends Component {
   static defaultProps = {
     animationType: "slide",
     transparent: true,
+  };
+
+  state = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  };
+
+  handleFirstName = (text) => {
+    this.setState({ firstName: text });
+  };
+  handleLastName = (text) => {
+    this.setState({ lastName: text });
+  };
+  handleEmail = (text) => {
+    this.setState({ email: text });
+  };
+  handlePassword = (text) => {
+    this.setState({ password: text });
+  };
+
+  handleSubmit = () => {
+    if (
+      this.state.firstName.length < 1 ||
+      this.state.lastName.length < 1 ||
+      this.state.email.length < 1 ||
+      this.state.password.length < 1
+    ) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   render() {
@@ -62,60 +87,72 @@ export default class Register extends Component {
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
               <View style={styles.modalView}>
                 <Image style={{ width: 150, height: 150 }} source={image} />
+                <Text>Sign Up</Text>
                 <View>
                   <TextInput
                     style={styles.input}
-                    onChangeText={(text) => console.log(text)}
-                    //   value={number}
-                    placeholder="First Name"
+                    onChangeText={this.handleFirstName}
+                    value={this.state.firstName}
                     mode="outlined"
-                  />
-                </View>
-                <Pressable>
-                  <View>
-                    <TextInput
-                      style={styles.input}
-                      onChangeText={(text) => console.log(text)}
-                      //   value={number}
-                      placeholder="Last Name"
-                      mode="outlined"
-                    />
-                  </View>
-                </Pressable>
-                <View>
-                  <TextInput
-                    style={styles.input}
-                    onChangeText={(text) => console.log(text)}
-                    //   value={number}
-                    placeholder="Email"
-                    mode="outlined"
+                    clearButtonMode="while-editing"
+                    label="First Name"
                   />
                 </View>
                 <View>
                   <TextInput
                     style={styles.input}
-                    onChangeText={(text) => console.log(text)}
-                    //   value={number}
-                    placeholder="Password"
+                    onChangeText={this.handleLastName}
+                    value={this.state.lastName}
                     mode="outlined"
+                    clearButtonMode="while-editing"
+                    label="Last Name"
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={this.handleEmail}
+                    value={this.state.email}
+                    mode="outlined"
+                    clearButtonMode="while-editing"
+                    label="Email"
+                    type="email"
+                  />
+                </View>
+                <View>
+                  <TextInput
+                    style={styles.input}
+                    onChangeText={this.handlePassword}
+                    value={this.state.password}
+                    mode="outlined"
+                    clearButtonMode="while-editing"
+                    label="Password"
                   />
                 </View>
                 <View style={styles.buttonView}>
-                  <Button
-                    icon="google"
-                    mode="contained"
-                    style={styles.button}
-                    //   onPress={() =>
-                    //     this.props.navigation.navigate("Tabs", { name: "user" })
-                    //   }
+                  <TouchableOpacity
+                    onPress={() => {
+                      if (this.handleSubmit()) {
+                        props.dismiss();
+                        props.navigation.navigate("Tabs", { name: "user" });
+                      } else {
+                        alert("Please fill out all fields!");
+                      }
+                    }}
                   >
-                    <Text>Submit</Text>
-                  </Button>
+                    <Button
+                      icon="account-circle"
+                      mode="contained"
+                      style={styles.buttonSubmit}
+                    >
+                      <Text>Submit</Text>
+                    </Button>
+                  </TouchableOpacity>
                   <TouchableOpacity onPress={props.dismiss}>
                     <Button
-                      icon="google"
+                      icon="window-close"
                       mode="contained"
-                      style={styles.button}
+                      style={styles.buttonCancel}
                     >
                       <Text>Cancel</Text>
                     </Button>

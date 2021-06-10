@@ -17,6 +17,7 @@ import {
   googleAndroidClientId,
 } from "../../config/constants";
 import Register from "../register/register";
+import Login from "../login/login";
 
 const image = require("./wend.png");
 
@@ -94,14 +95,22 @@ export default class Splash extends Component {
 
   state = {
     registerVisible: false,
+    loginVisible: false,
   };
 
-  showModal = () => {
+  showRegisterModal = () => {
     if (this.state.registerVisible == false) {
       this.setState({ registerVisible: true });
     }
   };
-  hideModal = () => this.setState({ registerVisible: false });
+  hideRegisterModal = () => this.setState({ registerVisible: false });
+
+  showLoginModal = () => {
+    if (this.state.loginVisible == false) {
+      this.setState({ loginVisible: true });
+    }
+  };
+  hideLoginModal = () => this.setState({ loginVisible: false });
 
   render() {
     StatusBar.setBarStyle("dark-content", true);
@@ -176,24 +185,30 @@ export default class Splash extends Component {
                 <Button
                   mode="contained"
                   style={styles.button}
-                  onPress={this.showModal}
+                  onPress={this.showRegisterModal}
                 >
                   <Text style={styles.textStyle}>Sign Up</Text>
                 </Button>
                 <Register
                   visible={this.state.registerVisible}
-                  dismiss={this.hideModal}
+                  dismiss={this.hideRegisterModal}
+                  navigation={this.props.navigation}
                 />
               </View>
-              <Button
-                mode="contained"
-                style={styles.button}
-                onPress={() =>
-                  this.props.navigation.navigate("Tabs", { name: "user" })
-                }
-              >
-                <Text style={styles.textStyle}>Sign In</Text>
-              </Button>
+              <View>
+                <Button
+                  mode="contained"
+                  style={styles.button}
+                  onPress={this.showLoginModal}
+                >
+                  <Text style={styles.textStyle}>Sign In</Text>
+                </Button>
+                <Login
+                  visible={this.state.loginVisible}
+                  dismiss={this.hideLoginModal}
+                  navigation={this.props.navigation}
+                />
+              </View>
             </View>
           </View>
         </SafeAreaView>
