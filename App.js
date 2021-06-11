@@ -21,8 +21,6 @@ const AppNavigator = createStackNavigator(
         gestureEnabled: true,
       },
     },
-    // Login: Login,
-    // Register: Register,
     Tabs: {
       screen: Tabs,
       navigationOptions: {

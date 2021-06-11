@@ -94,47 +94,6 @@ async function logInFacebook() {
   }
 }
 
-// function loginGoogle() {
-//   // try {
-//   //   const auth = Google.useAuthRequest({
-//   //     expoClientId: googleIOSClientId,
-//   //     //iosClientId: googleIOSClientId,
-//   //   });
-//   //   let body;
-//   //   console.log(auth);
-
-//   //   // if (!auth) {
-//   //   //   body = await logInFacebook();
-//   //   // } else {
-//   //   //   console.log(auth);
-//   //   //   const resolvedToken = auth.token;
-//   //   //   const response = await fetch(
-//   //   //     `https://graph.facebook.com/me?fields=email,name&access_token=${resolvedToken}`
-//   //   //   );
-//   //   //   body = await response.json();
-//   //   //   console.log(body);
-//   //   //   // // alert(`Hi ${body.name}!`);
-//   //   //   // console.log(body);
-//   //   // }
-//   //   // return { auth: true, data: body };
-//   // } catch (e) {
-//   //   throw e;
-//   // }
-//   const [request, response, promptAsync] = Google.useAuthRequest({
-//     expoClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-//     iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-//     androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-//     webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
-//   });
-
-//   React.useEffect(() => {
-//     if (response?.type === "success") {
-//       console.log(response);
-//       const { authentication } = response;
-//     }
-//   }, [response]);
-// }
-
 export default function Splash({ navigation }) {
   const [requestFacebook, responseFacebook, promptAsyncFacebook] =
     FacebookAuth.useAuthRequest({
@@ -145,20 +104,22 @@ export default function Splash({ navigation }) {
   React.useEffect(() => {
     if (responseFacebook?.type === "success") {
       const { code } = responseFacebook.params;
-      console.log(code);
+      console.log(responseFacebook);
+      navigation.navigate("Tabs");
     }
   }, [responseFacebook]);
 
   const [requestGoogle, responseGoogle, promptAsyncGoogle] =
     Google.useAuthRequest({
       expoClientId: constants.googleClientId,
-      // iosClientId: googleIOSClientId,
+      iosClientId: constants.googleIOSClientId,
     });
 
   React.useEffect(() => {
     if (responseGoogle?.type === "success") {
       const { authentication } = responseGoogle;
-      console.log(authentication);
+      console.log(responseGoogle);
+      navigation.navigate("Tabs");
     }
   }, [responseGoogle]);
 
@@ -253,7 +214,6 @@ export default function Splash({ navigation }) {
               mode="contained"
               style={styles.buttonGoogle}
               onPress={() => {
-                // navigation.navigate("Tabs");
                 promptAsyncGoogle();
               }}
             >
