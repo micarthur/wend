@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation-stack";
 import { createAppContainer } from "react-navigation";
 import { Provider as PaperProvider } from "react-native-paper";
-import Login from "./screens/login/login";
-import Register from "./screens/register/register";
 import Splash from "./screens/splash/splash";
 import Tabs from "./screens/tabs/tabs";
 
@@ -16,10 +14,22 @@ const instructions = Platform.select({
 
 const AppNavigator = createStackNavigator(
   {
-    Splash: Splash,
-    Login: Login,
+    Splash: {
+      screen: Splash,
+      navigationOptions: {
+        headerShown: false,
+        gestureEnabled: true,
+      },
+    },
+    // Login: Login,
     // Register: Register,
-    Tabs: Tabs,
+    Tabs: {
+      screen: Tabs,
+      navigationOptions: {
+        headerShown: false,
+        gestureEnabled: false,
+      },
+    },
   },
   {
     initialRouteName: "Splash",

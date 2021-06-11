@@ -10,9 +10,10 @@ import {
   TouchableOpacity,
   Keyboard,
   Pressable,
+  Alert,
 } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import Icon from "react-native-vector-icons/Ionicons";
+import AppLoading from "expo-app-loading";
 import styles from "./styles";
 import t from "prop-types";
 
@@ -48,10 +49,17 @@ export default class Login extends Component {
   };
 
   handleSubmit = () => {
-    if (this.state.email.length < 1 || this.state.password.length < 1) {
-      return false;
+    console.log(this.state.email);
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+    if (this.state.email.length < 1 && this.state.password.length < 1) {
+      return "both";
+    } else if (reg.test(this.state.email) === false) {
+      console.log("Email is Not Correct");
+      return "email";
+    } else if (this.state.password.length < 1) {
+      return "pwd";
     } else {
-      return true;
+      return "good";
     }
   };
 
@@ -97,11 +105,24 @@ export default class Login extends Component {
                 <View style={styles.buttonView}>
                   <TouchableOpacity
                     onPress={() => {
-                      if (this.handleSubmit()) {
+                      if (this.handleSubmit() === "both") {
+                        Alert.alert(
+                          "Empty Data",
+                          "Please enter your information!"
+                        );
+                      } else if (this.handleSubmit() === "email") {
+                        Alert.alert(
+                          "Invalid Email",
+                          "Please enter a valid email!"
+                        );
+                      } else if (this.handleSubmit() === "pwd") {
+                        Alert.alert(
+                          "Invalid Password",
+                          "Please enter a valid password!"
+                        );
+                      } else {
                         props.dismiss();
                         props.navigation.navigate("Tabs", { name: "user" });
-                      } else {
-                        alert("Please fill out all fields!");
                       }
                     }}
                   >

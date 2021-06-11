@@ -12,7 +12,7 @@ import {
   Pressable,
 } from "react-native";
 import { TextInput, Button } from "react-native-paper";
-import Icon from "react-native-vector-icons/Ionicons";
+import AppLoading from "expo-app-loading";
 import styles from "./styles";
 import t from "prop-types";
 

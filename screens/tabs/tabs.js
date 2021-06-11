@@ -8,6 +8,7 @@ import Search from "../search/search";
 import Bookmark from "../bookmark/bookmark";
 import Stocks from "../stocks/stocks";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import AppLoading from "expo-app-loading";
 import styles from "./styles";
 
 function SettingsScreen({ navigation }) {
@@ -25,11 +26,6 @@ function LogoTitle() {
 const Tab = createBottomTabNavigator();
 
 export default class Tabs extends Component {
-  static navigationOptions = {
-    headerShown: false,
-    gestureEnabled: false,
-  };
-
   render() {
     return (
       <NavigationContainer>
@@ -62,6 +58,7 @@ export default class Tabs extends Component {
             name="Home"
             component={Home}
             // user_name={this.props.name}
+            options={{ gestureEnabled: true }}
           />
           <Tab.Screen name="Search" component={Search} />
           <Tab.Screen name="Bookmarks" component={Bookmark} />

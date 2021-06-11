@@ -1,4 +1,4 @@
-import React, { Component, useEffect } from "react";
+import React, { Component, useEffect, useState } from "react";
 import {
   Text,
   View,
@@ -7,23 +7,29 @@ import {
   StatusBar,
 } from "react-native";
 import { Button } from "react-native-paper";
-// import { AppleButton } from "@invertase/react-native-apple-authentication";
+import * as WebBrowser from "expo-web-browser";
 import * as AppleAuthentication from "expo-apple-authentication";
 import * as Facebook from "expo-facebook";
+import * as FacebookAuth from "expo-auth-session/providers/facebook";
+import * as Google from "expo-auth-session/providers/google";
+import { ResponseType } from "expo-auth-session";
+import AppLoading from "expo-app-loading";
 import styles from "./styles";
-import {
-  facebookAppId,
-  googleIOSClientId,
-  googleAndroidClientId,
-} from "../../config/constants";
+import { constants } from "../../config/constants";
+// import * as Google from "expo-google-app-auth";
 import Register from "../register/register";
 import Login from "../login/login";
 
+WebBrowser.maybeCompleteAuthSession();
 const image = require("./wend.png");
 
 async function toggleFacebookAuthAsync() {
   try {
-    await Facebook.initializeAsync(facebookAppId);
+    await Facebook.logOutAsync();
+    await Facebook.initializeAsync({
+      appId: constants.facebookAppId,
+      appName: constants.facebookDisplayName,
+    });
     const auth = await Facebook.getAuthenticationCredentialAsync();
     let body;
 
@@ -36,6 +42,7 @@ async function toggleFacebookAuthAsync() {
         `https://graph.facebook.com/me?fields=email,name&access_token=${resolvedToken}`
       );
       body = await response.json();
+      console.log(body);
       // // alert(`Hi ${body.name}!`);
       // console.log(body);
     }
@@ -65,7 +72,7 @@ async function logInApple() {
 async function logInFacebook() {
   try {
     await Facebook.initializeAsync({
-      appId: facebookAppId,
+      appId: constants.facebookAppId,
     });
     // implement putting in and checking expiration date in database for auth expiration
     const { type, token, expirationDate, permissions, declinedPermissions } =
@@ -87,38 +94,98 @@ async function logInFacebook() {
   }
 }
 
-export default class Splash extends Component {
-  static navigationOptions = {
-    headerShown: false,
-    gestureEnabled: true,
-  };
+// function loginGoogle() {
+//   // try {
+//   //   const auth = Google.useAuthRequest({
+//   //     expoClientId: googleIOSClientId,
+//   //     //iosClientId: googleIOSClientId,
+//   //   });
+//   //   let body;
+//   //   console.log(auth);
 
-  state = {
-    registerVisible: false,
-    loginVisible: false,
-  };
+//   //   // if (!auth) {
+//   //   //   body = await logInFacebook();
+//   //   // } else {
+//   //   //   console.log(auth);
+//   //   //   const resolvedToken = auth.token;
+//   //   //   const response = await fetch(
+//   //   //     `https://graph.facebook.com/me?fields=email,name&access_token=${resolvedToken}`
+//   //   //   );
+//   //   //   body = await response.json();
+//   //   //   console.log(body);
+//   //   //   // // alert(`Hi ${body.name}!`);
+//   //   //   // console.log(body);
+//   //   // }
+//   //   // return { auth: true, data: body };
+//   // } catch (e) {
+//   //   throw e;
+//   // }
+//   const [request, response, promptAsync] = Google.useAuthRequest({
+//     expoClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+//     iosClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+//     androidClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+//     webClientId: "GOOGLE_GUID.apps.googleusercontent.com",
+//   });
+
+//   React.useEffect(() => {
+//     if (response?.type === "success") {
+//       console.log(response);
+//       const { authentication } = response;
+//     }
+//   }, [response]);
+// }
+
+export default function Splash({ navigation }) {
+  const [requestFacebook, responseFacebook, promptAsyncFacebook] =
+    FacebookAuth.useAuthRequest({
+      clientId: constants.facebookAppId,
+      responseType: ResponseType.Code,
+    });
+
+  React.useEffect(() => {
+    if (responseFacebook?.type === "success") {
+      const { code } = responseFacebook.params;
+      console.log(code);
+    }
+  }, [responseFacebook]);
+
+  const [requestGoogle, responseGoogle, promptAsyncGoogle] =
+    Google.useAuthRequest({
+      expoClientId: constants.googleClientId,
+      // iosClientId: googleIOSClientId,
+    });
+
+  React.useEffect(() => {
+    if (responseGoogle?.type === "success") {
+      const { authentication } = responseGoogle;
+      console.log(authentication);
+    }
+  }, [responseGoogle]);
+
+  const [registerVisible, setRegisterVisible] = useState(false);
+  const [loginVisible, setLoginVisible] = useState(false);
 
   showRegisterModal = () => {
-    if (this.state.registerVisible == false) {
-      this.setState({ registerVisible: true });
+    if (registerVisible == false) {
+      setRegisterVisible(true);
     }
   };
-  hideRegisterModal = () => this.setState({ registerVisible: false });
+  hideRegisterModal = () => setRegisterVisible(false);
 
   showLoginModal = () => {
-    if (this.state.loginVisible == false) {
-      this.setState({ loginVisible: true });
+    if (loginVisible == false) {
+      setLoginVisible(true);
     }
   };
-  hideLoginModal = () => this.setState({ loginVisible: false });
+  hideLoginModal = () => setLoginVisible(false);
 
-  render() {
-    StatusBar.setBarStyle("dark-content", true);
-    return (
-      <ImageBackground source={image} style={styles.image}>
-        <SafeAreaView style={{ flex: 1 }}>
-          <View style={styles.containerMain}>
-            {/* <View style={styles.bottomViewApple}>
+  // render() {
+  StatusBar.setBarStyle("dark-content", true);
+  return (
+    <ImageBackground source={image} style={styles.image}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.containerMain}>
+          {/* <View style={styles.bottomViewApple}>
               <Button
                 icon="apple"
                 mode="contained"
@@ -131,100 +198,101 @@ export default class Splash extends Component {
                 <Text style={styles.textStyleSocial}>Sign In With Apple</Text>
               </Button>
             </View> */}
-            <View style={styles.bottomViewApple}>
-              <AppleAuthentication.AppleAuthenticationButton
-                buttonType={
-                  AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
-                }
-                buttonStyle={
-                  AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
-                }
-                cornerRadius={50}
-                style={styles.buttonApple}
-                onPress={async () => {
-                  try {
-                    const response = await logInApple();
-                    console.log(response);
-                    if (response.authorizationCode) {
-                      this.props.navigation.navigate("Tabs");
-                    }
-                  } catch (e) {
-                    if (e.code === "ERR_CANCELED") {
-                      console.log("Apple Sign In Request Cancelled!");
-                    } else {
-                      console.log(e);
-                    }
+          <View style={styles.bottomViewApple}>
+            <AppleAuthentication.AppleAuthenticationButton
+              buttonType={
+                AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN
+              }
+              buttonStyle={
+                AppleAuthentication.AppleAuthenticationButtonStyle.BLACK
+              }
+              cornerRadius={50}
+              style={styles.buttonApple}
+              onPress={async () => {
+                try {
+                  const response = await logInApple();
+                  console.log(response);
+                  // authenticate response.user with user from database here
+                  if (response.authorizationCode) {
+                    navigation.navigate("Tabs");
                   }
-                }}
-              />
-            </View>
-            <View style={styles.bottomViewGoogle}>
-              <Button
-                icon="google"
-                mode="contained"
-                style={styles.buttonGoogle}
-                onPress={() =>
-                  this.props.navigation.navigate("Tabs", { name: "user" })
-                }
-              >
-                <Text style={styles.textStyleSocial}>Sign in with Google</Text>
-              </Button>
-            </View>
-            <View style={styles.bottomViewFacebook}>
-              <Button
-                icon="facebook"
-                mode="contained"
-                style={styles.buttonFacebook}
-                onPress={async () => {
-                  try {
-                    const response = await toggleFacebookAuthAsync();
-                    if (response.auth) {
-                      console.log(response);
-                      this.props.navigation.navigate("Tabs", {
-                        name: response.data.name,
-                      });
-                    }
-                  } catch (e) {
+                } catch (e) {
+                  if (e.code === "ERR_CANCELED") {
+                    console.log("Apple Sign In Request Cancelled!");
+                  } else {
                     console.log(e);
                   }
-                }}
+                }
+              }}
+            />
+          </View>
+          <View style={styles.bottomViewFacebook}>
+            <Button
+              icon="facebook"
+              mode="contained"
+              style={styles.buttonFacebook}
+              onPress={async () => {
+                // try {
+                //   const response = await toggleFacebookAuthAsync();
+                //   if (response.auth) {
+                //     console.log(response);
+                //     navigation.navigate("Tabs");
+                //   }
+                // } catch (e) {
+                //   console.log(e);
+                // }
+                promptAsyncFacebook();
+              }}
+            >
+              <Text style={styles.textStyleSocial}>Sign In With FB</Text>
+            </Button>
+          </View>
+          <View style={styles.bottomViewGoogle}>
+            <Button
+              icon="google"
+              mode="contained"
+              style={styles.buttonGoogle}
+              onPress={() => {
+                // navigation.navigate("Tabs");
+                promptAsyncGoogle();
+              }}
+            >
+              <Text style={styles.textStyleSocial}>Sign in with Google</Text>
+            </Button>
+          </View>
+          <View style={styles.bottomView}>
+            <View>
+              <Button
+                mode="contained"
+                style={styles.button}
+                onPress={showRegisterModal}
               >
-                <Text style={styles.textStyleSocial}>Sign In With FB</Text>
+                <Text style={styles.textStyle}>Sign Up</Text>
               </Button>
+              <Register
+                visible={registerVisible}
+                dismiss={hideRegisterModal}
+                navigation={navigation}
+              />
             </View>
-            <View style={styles.bottomView}>
-              <View>
-                <Button
-                  mode="contained"
-                  style={styles.button}
-                  onPress={this.showRegisterModal}
-                >
-                  <Text style={styles.textStyle}>Sign Up</Text>
-                </Button>
-                <Register
-                  visible={this.state.registerVisible}
-                  dismiss={this.hideRegisterModal}
-                  navigation={this.props.navigation}
-                />
-              </View>
-              <View>
-                <Button
-                  mode="contained"
-                  style={styles.button}
-                  onPress={this.showLoginModal}
-                >
-                  <Text style={styles.textStyle}>Sign In</Text>
-                </Button>
-                <Login
-                  visible={this.state.loginVisible}
-                  dismiss={this.hideLoginModal}
-                  navigation={this.props.navigation}
-                />
-              </View>
+            <View>
+              <Button
+                mode="contained"
+                style={styles.button}
+                onPress={showLoginModal}
+              >
+                <Text style={styles.textStyle}>Sign In</Text>
+              </Button>
+              <Login
+                visible={loginVisible}
+                dismiss={hideLoginModal}
+                navigation={navigation}
+              />
             </View>
           </View>
-        </SafeAreaView>
-      </ImageBackground>
-    );
-  }
+        </View>
+      </SafeAreaView>
+    </ImageBackground>
+  );
+  // }
 }
